@@ -328,7 +328,7 @@ function webedition(){
     generatelaunchers(launcher);
     document.getElementById('game-bg').style.backgroundImage = 'url(./assets/images/web-edition.jpg)';
     document.getElementById('game-title').src = './assets/images/web-title.png';
-    document.getElementById('gameedition').innerHTML = 'EAGLERCRAFT WEB EDITION';
+    document.getElementById('gameedition').innerHTML = 'MINECRAFT WEB EDITION';
     document.getElementById('header2').style.display = 'none';
     document.getElementById('gtabs2').classList.add('selected');
 }
@@ -340,7 +340,7 @@ function moddededition(){
     generatelaunchers(launcher);
     document.getElementById('game-bg').style.backgroundImage = 'url(./assets/images/modded-edition.jpg)';
     document.getElementById('game-title').src = './assets/images/modded-title.png';
-    document.getElementById('gameedition').innerHTML = 'EAGLERCRAFT MODDED';
+    document.getElementById('gameedition').innerHTML = 'MINECRAFT MODDED';
     document.getElementById('header5').style.display = 'none';
     document.getElementById('gtabs3').classList.add('selected');
 }
@@ -352,7 +352,7 @@ function eaglercontrols(){
     generatelaunchers(launcher);
     document.getElementById('game-bg').style.backgroundImage = 'url(./assets/images/controls-edition.jpg)';
     document.getElementById('game-title').src = './assets/images/controls-title.png';
-    document.getElementById('gameedition').innerHTML = 'EAGLERCRAFT MOBILE/CONTROLLER';
+    document.getElementById('gameedition').innerHTML = 'MINECRAFT MOBILE/CONTROLLER';
     document.getElementById('header2').style.display = 'none';
     document.getElementById('header5').style.display = 'none';
     document.getElementById('gtabs4').classList.add('selected');
