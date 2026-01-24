@@ -40,7 +40,7 @@
 - [ ] Add Skins screen
 - [x] Add Patch Notes screen
 - [ ] Fix display errors
-- [ ] Offline launcher download?
+- [ ] Offline launcher download? 
 </details>
 
 <hr>
