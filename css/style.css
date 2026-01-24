@@ -215,12 +215,9 @@ hr {
 
 /* 🔥 FIXED GAME TITLE — ONLY CHANGE */
 #game-title {
-    width: 543px;             /* actual PNG width */
-    height: 148px;            /* actual PNG height */
-    margin-top: 5.4vw;        /* adjust up/down if needed */
-    animation: drop .5s linear forwards;
-    object-fit: contain;
-    image-rendering: pixelated;
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
 }
 
 #gameSelection {
