@@ -154,12 +154,11 @@ hr {
 /* Header CSS */
 
 .mainPage {
-    width: 84vw;
-    background-color: var(--ui-main);
-    position: relative;   /* FIX */
-    overflow: hidden;     /* FIX */
-    z-index: 2;           /* FIX */
+    position: relative;
+    display: block;
+    overflow: hidden;
 }
+
 /* FIX — Ensure main panels stay inside mainPage instead of covering sidebar */
 #game-bg,
 #mods,
