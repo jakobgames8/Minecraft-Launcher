@@ -224,9 +224,10 @@ hr {
     position: absolute;
     bottom: 0;
     width: 84vw;
-    height: 4.5vw;
-    justify-content: space-around;
+    height: 5vw;
+    z-index: 3;
     display: flex;
+    align-items: center;
     background-color: var(--ui-main);
 }
 
@@ -658,4 +659,9 @@ hr {
     align-items: center;
     justify-content: flex-start;
     font-size: 1.1vw;
+}
+
+.gameHeader {
+    z-index: 4;
+    position: relative;
 }
