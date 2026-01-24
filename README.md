@@ -35,7 +35,7 @@
 - [ ] Add a customizable launcher selector
 - [x] Save last played game
 - [x] Add FAQ screen
-- [x] Add Installations screen
+- [x] Add Installations screen 
 - [x] Add Mods screen
 - [ ] Add Skins screen
 - [x] Add Patch Notes screen
