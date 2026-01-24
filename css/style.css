@@ -198,13 +198,14 @@ hr {
 
 /* 🌶️ FIXED TITLE (no squish, higher, centers better) */
 #game-title {
-    height: 11vw;          /* controls scale cleanly */
-    width: auto;           /* keeps aspect ratio */
-    margin-top: 3.3vw;     /* bumped up, OG launcher spacing */
+    width: 47vw;        /* was 40vw */
+    height: auto;
+    margin-top: 3.3vw;  /* keep your working vertical offset */
     object-fit: contain;
     image-rendering: pixelated;
     animation: drop .5s linear forwards;
 }
+
 
 #gameSelection {
     position: absolute;
