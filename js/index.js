@@ -277,6 +277,7 @@ function generatenotes() {
                 notescreen.appendChild(notescreenhr);
                 notescreen.appendChild(notescreendetails);
                 notescreen.style.display = "flex";
+                notescreen.style.pointerEvents = "auto";
             });
 
             const patchnoteimg = document.createElement("img");
@@ -315,6 +316,7 @@ function sortnote(type) {
 
 function closenotescreen() {
     notescreen.style.display = "none";
+    notescreen.style.pointerEvents = "none";
     while (notescreen.firstChild) {notescreen.removeChild(notescreen.firstChild)};
 }
 

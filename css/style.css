@@ -67,6 +67,7 @@ hr {
     transition: 0.3s;
     animation: drop .5s linear forwards;
     font-size: 1.5vw;
+    pointer-events: none;
 }
 
 #naerror {
@@ -102,7 +103,8 @@ hr {
     display: flex;
     flex-direction: column;
     position: relative;
-    z-index: 999;
+    z-index: 2000;
+    pointer-events: auto;
 }
 
 .sidebarOptions {
@@ -167,13 +169,16 @@ hr {
 .gameHeader {
     padding: 1.8vw 1.8vw 0;
     position: relative;
-    z-index: 5;
+    z-index: 1500;
+    pointer-events: auto;
 }
 .currentGame {font-size: 1.2vw;}
 
 .gameTabs {
     display: flex;
     align-items: center;
+    position: relative;
+    z-index: 1501;
 }
 
 .headerButtons {
@@ -203,9 +208,11 @@ hr {
     background-position: center;
     background-repeat: no-repeat;
     position: absolute;
+    top: 0;
+    bottom: 4.5vw;
     display: flex;
     width: 84vw;
-    height: 84vh;
+    height: auto;
     justify-content: center;
     z-index: 0;
     pointer-events: none;
@@ -573,6 +580,7 @@ hr {
     width: 100vw;
     height: 100vh;
     user-select: text;
+    pointer-events: none;
 }
 
 .notescreenheader {

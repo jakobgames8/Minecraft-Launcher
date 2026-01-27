@@ -73,7 +73,7 @@ hr {
 
 #game-bg {
   width: 94.5vw;
-  height: 87vh;
+  height: auto;
 }
 
 #game-title {
