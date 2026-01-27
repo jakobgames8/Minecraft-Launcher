@@ -160,10 +160,15 @@ hr {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    z-index: 0;
 }
 
 
-.gameHeader {padding: 1.8vw 1.8vw 0;}
+.gameHeader {
+    padding: 1.8vw 1.8vw 0;
+    position: relative;
+    z-index: 5;
+}
 .currentGame {font-size: 1.2vw;}
 
 .gameTabs {
@@ -203,6 +208,7 @@ hr {
     height: 84vh;
     justify-content: center;
     z-index: 0;
+    pointer-events: none;
 }
 
 #game-title {
@@ -210,6 +216,7 @@ hr {
     height: 6.5vw;
     margin-top: 6vw;
     animation: drop .5s linear forwards;
+    pointer-events: none;
 }
 
 #gameSelection {
