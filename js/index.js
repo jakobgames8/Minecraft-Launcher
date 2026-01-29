@@ -13,6 +13,10 @@ function errorNA(text) {
     }, 3200);
 }
 
+// Cache-bust static assets when you replace files.
+const assetVersion = "20260129";
+const withAssetVersion = (path) => `${path}?v=${assetVersion}`;
+
 // Last Played Game Option
 let selectedGame1 = localStorage.getItem("basegame");
 let selectedGame2 = localStorage.getItem("moddedgame");
@@ -328,8 +332,8 @@ function webedition(){
     generateprofile(1);
     generategames(launcher);
     generatelaunchers(launcher);
-    document.getElementById('game-bg').style.backgroundImage = 'url(./assets/images/web-edition.jpg)';
-    document.getElementById('game-title').src = './assets/images/web-title.png';
+    document.getElementById('game-bg').style.backgroundImage = `url(${withAssetVersion('./assets/images/web-edition.jpg')})`;
+    document.getElementById('game-title').src = withAssetVersion('./assets/images/web-title.png');
     document.getElementById('game-title').classList.add('web-title');
     document.getElementById('game-title').classList.remove('modded-title', 'controls-title');
     document.getElementById('gameedition').innerHTML = 'MINECRAFT WEB EDITION';
@@ -342,8 +346,8 @@ function moddededition(){
     generateprofile(2);
     generategames(launcher);
     generatelaunchers(launcher);
-    document.getElementById('game-bg').style.backgroundImage = 'url(./assets/images/modded-edition.jpg)';
-    document.getElementById('game-title').src = './assets/images/modded-title.png';
+    document.getElementById('game-bg').style.backgroundImage = `url(${withAssetVersion('./assets/images/modded-edition.jpg')})`;
+    document.getElementById('game-title').src = withAssetVersion('./assets/images/modded-title.png');
     document.getElementById('game-title').classList.remove('web-title', 'controls-title');
     document.getElementById('game-title').classList.add('modded-title');
     document.getElementById('gameedition').innerHTML = 'MINECRAFT MODDED';
@@ -356,8 +360,8 @@ function eaglercontrols(){
     generateprofile(3);
     generategames(launcher);
     generatelaunchers(launcher);
-    document.getElementById('game-bg').style.backgroundImage = 'url(./assets/images/controls-edition.jpg)';
-    document.getElementById('game-title').src = './assets/images/controls-title.png';
+    document.getElementById('game-bg').style.backgroundImage = `url(${withAssetVersion('./assets/images/controls-edition.jpg')})`;
+    document.getElementById('game-title').src = withAssetVersion('./assets/images/controls-title.png');
     document.getElementById('game-title').classList.remove('web-title', 'modded-title');
     document.getElementById('game-title').classList.add('controls-title');
     document.getElementById('gameedition').innerHTML = 'MINECRAFT MOBILE/CONTROLLER';
