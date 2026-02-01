@@ -10,7 +10,7 @@
   {
     "title": "Auto Respawn",
     "author": "Oeil-de-Lynx",
-    "description": "Eagler Autorespawning!",
+    "description": "Mine Autorespawning!",
     "icon": "./assets/images/mod-icons/missing.png",
     "link": "auto-respawn.js",
     "active": false
@@ -26,7 +26,7 @@
   {
     "title": "Barney's Music Mod",
     "author": "BarneyTheGod",
-    "description": "Play your music inside of eaglercraft",
+    "description": "Play your music inside of Minecraft",
     "icon": "./assets/images/mod-icons/music.png",
     "link": "barneys-music.js",
     "active": false
@@ -72,7 +72,7 @@
     "active": false
   },
   {
-    "title": "Eagler Homes",
+    "title": "Mine Homes",
     "author": "Patrick",
     "description": "Adds setting homes and teleportation to them",
     "icon": "./assets/images/mod-icons/home.png",
@@ -80,7 +80,7 @@
     "active": false
   },
   {
-    "title": "Fresh Eagler UI",
+    "title": "Fresh Mine UI",
     "author": "Murturtle",
     "description": "Makes the UIs slide in and re works the main screen!",
     "icon": "./assets/images/mod-icons/missing.png",
@@ -106,7 +106,7 @@
   {
     "title": "JEI",
     "author": "Oeil-de-Lynx",
-    "description": "Just Enough Items, but Eagler!",
+    "description": "Just Enough Items, but Mine!",
     "icon": "./assets/images/mod-icons/jei.png",
     "link": "jei.js",
     "active": false
@@ -176,3 +176,4 @@
     "active": false
   }
 ]
+
