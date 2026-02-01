@@ -57,6 +57,42 @@
 						}
 						writeKey("profile");
 					}
+					function installSkinProfileHook() {
+						var raw = null;
+						try { raw = window.localStorage.getItem("launcher.customSkin"); } catch(e) { return; }
+						if(!raw) return;
+						var skin = null;
+						try { skin = JSON.parse(raw); } catch(e) { return; }
+						if(!skin || !skin.data) return;
+						var model = (skin.model === "slim") ? "slim" : "default";
+						var skinData = skin.data || skin.raw;
+						var namespaces = ["_eaglercraft_1.12", "_eaglercraftX", "_eaglercraft_1.8"];
+						var profileKeys = {};
+						for(var i = 0; i < namespaces.length; i++) {
+							var ns = namespaces[i];
+							profileKeys[ns + ".profile"] = true;
+							profileKeys[ns + ":profile"] = true;
+							profileKeys[ns + "/profile"] = true;
+						}
+						profileKeys["profile"] = true;
+						var origGet = window.localStorage.getItem;
+						window.localStorage.getItem = function(key) {
+							var val = origGet.call(this, key);
+							if(!profileKeys[key]) return val;
+							var profile = {};
+							try { profile = val ? JSON.parse(val) : {}; } catch(e) { profile = {}; }
+							if(typeof profile !== "object" || profile === null) profile = {};
+							if(typeof profile.customSkin === "object" && profile.customSkin !== null) {
+								profile.customSkin.data = skinData;
+								profile.customSkin.model = model;
+							} else {
+								profile.customSkin = { data: skinData, model: model };
+							}
+							profile.customSkinModel = model;
+							profile.presetSkin = "CUSTOM";
+							return JSON.stringify(profile);
+						};
+					}
 					function renderSkinDebug() {
 						if(window.location.search.indexOf("skinDebug=1") === -1) return;
 						var panel = document.createElement("div");
@@ -109,6 +145,7 @@
 						ensurePanel();
 						setInterval(ensurePanel, 250);
 					}
+					installSkinProfileHook();
 					applyLauncherSkin();
 					renderSkinDebug();
 					
