@@ -14,7 +14,7 @@ function errorNA(text) {
 }
 
 // Cache-bust static assets when you replace files.
-const assetVersion = "20260129";
+const assetVersion = "20260201";
 const withAssetVersion = (path) => `${path}?v=${assetVersion}`;
 
 // Last Played Game Option
