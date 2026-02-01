@@ -26,18 +26,18 @@
 						try { skin = JSON.parse(raw); } catch(e) { return; }
 						if(!skin || !skin.data) return;
 						var model = (skin.model === "slim") ? "slim" : "default";
+						var skinData = skin.data || skin.raw;
 						function mergeProfile(existing) {
 							var profile = {};
 							try { profile = existing ? JSON.parse(existing) : {}; } catch(e) { profile = {}; }
 							if(typeof profile !== "object" || profile === null) profile = {};
 							if(typeof profile.customSkin === "object" && profile.customSkin !== null) {
-								profile.customSkin.data = skin.data;
+								profile.customSkin.data = skinData;
 								profile.customSkin.model = model;
 							} else {
-								profile.customSkin = skin.data;
-								profile.customSkinModel = model;
-								profile.customSkinObj = { data: skin.data, model: model };
+								profile.customSkin = skinData;
 							}
+							profile.customSkinModel = model;
 							profile.presetSkin = "CUSTOM";
 							return JSON.stringify(profile);
 						}

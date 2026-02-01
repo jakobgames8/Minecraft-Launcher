@@ -485,17 +485,30 @@ function updateSkinPreview() {
 }
 
 function saveSkin(dataUrl, width, height, model) {
-    const base64 = dataUrl.split(",")[1];
-    const skin = {
-        data: base64,
-        width,
-        height,
-        model,
-        updated: new Date().toISOString()
+    const canvas = document.createElement("canvas");
+    canvas.width = 64;
+    canvas.height = 64;
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+    img.onload = () => {
+        ctx.clearRect(0, 0, 64, 64);
+        ctx.drawImage(img, 0, 0);
+        const normalizedDataUrl = canvas.toDataURL("image/png");
+        const normalizedBase64 = normalizedDataUrl.split(",")[1];
+        const skin = {
+            data: normalizedBase64,
+            width,
+            height,
+            model,
+            updated: new Date().toISOString()
+        };
+        localStorage.setItem(SKIN_STORAGE_KEY, JSON.stringify(skin));
+        localStorage.setItem(SKIN_MODEL_KEY, model);
+        updateSkinPreview();
+        applySkinToAllGames();
     };
-    localStorage.setItem(SKIN_STORAGE_KEY, JSON.stringify(skin));
-    localStorage.setItem(SKIN_MODEL_KEY, model);
-    updateSkinPreview();
+    img.src = dataUrl;
+    return;
 }
 
 function clearSkin() {
@@ -553,7 +566,6 @@ function initSkinsUI() {
                 }
                 const selectedModel = document.querySelector("input[name='skinModel']:checked").value;
                 saveSkin(dataUrl, img.width, img.height, selectedModel);
-                applySkinToAllGames();
             };
             img.src = dataUrl;
         };
