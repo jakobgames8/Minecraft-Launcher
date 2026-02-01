@@ -36,7 +36,7 @@
 								profile.customSkin.data = skinData;
 								profile.customSkin.model = model;
 							} else {
-								profile.customSkin = skinData;
+								profile.customSkin = { data: skinData, model: model };
 							}
 							profile.customSkinModel = model;
 							profile.presetSkin = "CUSTOM";
