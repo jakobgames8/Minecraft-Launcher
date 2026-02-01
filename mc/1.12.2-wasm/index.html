@@ -101,7 +101,13 @@
 							lines.push(key + ": customSkin=" + csType + ", model=" + csModel + ", preset=" + (profile.presetSkin || "n/a"));
 						}
 						panel.textContent = lines.join("\n");
-						document.body.appendChild(panel);
+						panel.style.pointerEvents = "none";
+						function ensurePanel() {
+							if(!panel.parentNode) document.body.appendChild(panel);
+							panel.style.zIndex = "2147483647";
+						}
+						ensurePanel();
+						setInterval(ensurePanel, 250);
 					}
 					applyLauncherSkin();
 					renderSkinDebug();
