@@ -57,7 +57,54 @@
 						}
 						writeKey("profile");
 					}
+					function renderSkinDebug() {
+						if(window.location.search.indexOf("skinDebug=1") === -1) return;
+						var panel = document.createElement("div");
+						panel.style.position = "fixed";
+						panel.style.top = "10px";
+						panel.style.left = "10px";
+						panel.style.zIndex = "99999";
+						panel.style.padding = "10px 12px";
+						panel.style.background = "rgba(0,0,0,0.75)";
+						panel.style.color = "#fff";
+						panel.style.font = "12px/1.4 monospace";
+						panel.style.border = "1px solid rgba(255,255,255,0.2)";
+						panel.style.maxWidth = "420px";
+						panel.style.whiteSpace = "pre-wrap";
+						function safeGet(key) {
+							try { return window.localStorage.getItem(key); } catch(e) { return null; }
+						}
+						function readProfile(key) {
+							var raw = safeGet(key);
+							if(!raw) return null;
+							try { return JSON.parse(raw); } catch(e) { return { _parseError: true }; }
+						}
+						var keys = ["_eaglercraft_1.12.profile", "_eaglercraft_1.12:profile", "_eaglercraft_1.12/profile", "profile"];
+						var lines = [];
+						var launcherSkin = safeGet("launcher.customSkin");
+						lines.push("launcher.customSkin: " + (launcherSkin ? "present" : "missing"));
+						lines.push("");
+						for(var i = 0; i < keys.length; i++) {
+							var key = keys[i];
+							var profile = readProfile(key);
+							if(!profile) {
+								lines.push(key + ": missing");
+								continue;
+							}
+							if(profile._parseError) {
+								lines.push(key + ": parse error");
+								continue;
+							}
+							var cs = profile.customSkin;
+							var csType = (cs && typeof cs === "object") ? "object" : (typeof cs);
+							var csModel = (cs && typeof cs === "object" && cs.model) ? cs.model : (profile.customSkinModel || "n/a");
+							lines.push(key + ": customSkin=" + csType + ", model=" + csModel + ", preset=" + (profile.presetSkin || "n/a"));
+						}
+						panel.textContent = lines.join("\n");
+						document.body.appendChild(panel);
+					}
 					applyLauncherSkin();
+					renderSkinDebug();
 					
 					// %%%%%%%%% launch options %%%%%%%%%%%%
 					
