@@ -178,7 +178,7 @@
     function check(){
       var scope = root || document.body;
       var canvas = scope ? scope.querySelector('canvas') : document.querySelector('canvas');
-      if((canvas && (Date.now() - start) > 3000) || attempts > 600){
+      if((canvas && (Date.now() - start) > 12000) || attempts > 1800){
         var screen = document.getElementById('startup-screen');
         if(screen && screen.parentNode){
           screen.parentNode.removeChild(screen);
@@ -226,5 +226,6 @@
 		</div>
 	</body>
 </html>
+
 
 
