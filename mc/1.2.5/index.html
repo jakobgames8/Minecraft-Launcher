@@ -5,6 +5,40 @@
     <link rel="icon" type="image/png" href="../../assets/images/logo.png">
     <title>Minecraft 1.2.5</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script type="text/javascript">
+      (function() {
+        function readLauncherSkin() {
+          var raw = null;
+          try { raw = window.localStorage.getItem("launcher.customSkin"); } catch (e) { return null; }
+          if (!raw) return null;
+          try { return JSON.parse(raw); } catch (e) { return null; }
+        }
+        function isLegacySkinUrl(url) {
+          if (!url) return false;
+          if (typeof url !== "string") return false;
+          return url.indexOf("MinecraftSkins/") !== -1 || url.indexOf("minecraft.net/skin/") !== -1;
+        }
+        function installSkinHook() {
+          var proto = window.HTMLImageElement && window.HTMLImageElement.prototype;
+          if (!proto) return;
+          var desc = Object.getOwnPropertyDescriptor(proto, "src");
+          if (!desc || typeof desc.set !== "function") return;
+          Object.defineProperty(proto, "src", {
+            get: desc.get,
+            set: function(value) {
+              try {
+                var skin = readLauncherSkin();
+                if (skin && skin.data && isLegacySkinUrl(value)) {
+                  return desc.set.call(this, "data:image/png;base64," + skin.data);
+                }
+              } catch (e) {}
+              return desc.set.call(this, value);
+            }
+          });
+        }
+        installSkinHook();
+      })();
+    </script>
     <script type = text/javascript>
 	window.addEventListener("load", function() {
 	    window.assetsURI = "assets.epk";
