@@ -514,30 +514,58 @@ function saveSkin(dataUrl, width, height, model) {
 function clearSkin() {
     localStorage.removeItem(SKIN_STORAGE_KEY);
     updateSkinPreview();
+    applySkinToAllGames();
 }
 
 function applySkinToNamespace(namespace, skin) {
     if (!skin) return;
     const key = `${namespace}.profile`;
+    applySkinToProfileKey(key, skin);
+}
+
+function applySkinToAllGames() {
+    const skin = getStoredSkin();
+    if (!skin) return;
+    const keys = new Set();
+    keys.add("profile");
+    SKIN_PROFILE_NAMESPACES.forEach((ns) => {
+        keys.add(`${ns}.profile`);
+        keys.add(`${ns}:profile`);
+        keys.add(`${ns}/profile`);
+    });
+
+    try {
+        for (let i = 0; i < localStorage.length; i += 1) {
+            const key = localStorage.key(i);
+            if (!key) continue;
+            if (/(^|[.:/])profile$/i.test(key)) {
+                keys.add(key);
+            }
+        }
+    } catch {}
+
+    keys.forEach((key) => applySkinToProfileKey(key, skin));
+}
+
+function applySkinToProfileKey(key, skin) {
+    if (!key || !skin) return;
     let profile = {};
     try {
         profile = JSON.parse(localStorage.getItem(key)) || {};
     } catch {
         profile = {};
     }
+    if (typeof profile !== "object" || profile === null) profile = {};
     profile.customSkin = {
         model: skin.model === "slim" ? "slim" : "default",
         data: skin.data
     };
+    profile.customSkinModel = skin.model === "slim" ? "slim" : "default";
     if (!profile.presetSkin) profile.presetSkin = "CUSTOM";
     if (!profile.username) profile.username = "Player";
-    localStorage.setItem(key, JSON.stringify(profile));
-}
-
-function applySkinToAllGames() {
-    const skin = getStoredSkin();
-    if (!skin) return;
-    SKIN_PROFILE_NAMESPACES.forEach((ns) => applySkinToNamespace(ns, skin));
+    try {
+        localStorage.setItem(key, JSON.stringify(profile));
+    } catch {}
 }
 
 function initSkinsUI() {
