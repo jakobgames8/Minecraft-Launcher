@@ -22,7 +22,7 @@ main();
   inset: 0;
   background: #000 url("../../assets/images/startup.png") center / cover no-repeat;
   image-rendering: pixelated;
-  z-index: 9999;
+  z-index: 2147483647;
 }
 </style>
 <script>
@@ -34,7 +34,7 @@ main();
     function check(){
       var scope = root || document.body;
       var canvas = scope ? scope.querySelector('canvas') : document.querySelector('canvas');
-      if((canvas && (Date.now() - start) > 12000) || attempts > 1800){
+      if((Date.now() - start) > 30000 || attempts > 1800){
         var screen = document.getElementById('startup-screen');
         if(screen && screen.parentNode){
           screen.parentNode.removeChild(screen);
@@ -53,6 +53,7 @@ main();
 <div id="startup-screen"></div>
 </body>
 </html>
+
 
 
 
