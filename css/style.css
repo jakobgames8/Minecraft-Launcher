@@ -223,24 +223,25 @@ hr {
 }
 
 #game-title {
-    width: auto;
-    height: auto;
+    width: 1003px;
+    height: 157px;
     max-width: 70vw;
     max-height: 35vh;
     margin-top: 8vw;
     animation: drop .5s linear forwards;
     pointer-events: none;
+    object-fit: contain;
 }
 
 #game-title.web-title {
-    width: min(70vw, 1003px);
-    height: auto;
+    width: 1003px;
+    height: 157px;
 }
 
 #game-title.modded-title,
 #game-title.controls-title {
-    width: min(70vw, 1003px);
-    height: auto;
+    width: 1003px;
+    height: 157px;
 }
 
 #gameSelection {
