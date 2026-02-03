@@ -46,11 +46,34 @@
   }
   window.addEventListener('load', removeStartupScreen);
 })();
+</script><!-- Startup Screen Enforcer -->
+<script>
+(function(){
+  var start = Date.now();
+  var timeoutMs = 30000;
+  function ensure(){
+    if (Date.now() - start > timeoutMs) {
+      var existing = document.getElementById('startup-screen');
+      if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+      return;
+    }
+    var overlay = document.getElementById('startup-screen');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'startup-screen';
+      overlay.style.cssText = 'position:fixed;inset:0;background:#000 url("../../assets/images/startup.png") center / cover no-repeat;image-rendering:pixelated;z-index:2147483647;pointer-events:none;';
+      (document.body || document.documentElement).appendChild(overlay);
+    }
+    requestAnimationFrame(ensure);
+  }
+  ensure();
+})();
 </script></head>
 <body style="margin:0px;width:100vw;height:100vh;">
 <div id="startup-screen"></div>
 </body>
 </html>
+
 
 
 
