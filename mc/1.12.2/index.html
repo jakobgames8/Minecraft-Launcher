@@ -19,45 +19,70 @@
 				if(window.location.href.indexOf("file:") === 0) {
 					alert("HTTP please, do not open this file locally, run a local HTTP server and load it via HTTP");
 				}else {
-					function applyLauncherSkin() {
+					function readLauncherSkin() {
 						var raw = null;
-						try { raw = window.localStorage.getItem("launcher.customSkin"); } catch(e) { return; }
-						if(!raw) return;
-						var skin = null;
-						try { skin = JSON.parse(raw); } catch(e) { return; }
-						if(!skin || !skin.data) return;
+						try { raw = window.localStorage.getItem("launcher.customSkin"); } catch(e) { return null; }
+						if(!raw) return null;
+						try { return JSON.parse(raw); } catch(e) { return null; }
+					}
+					function mergeProfileWithSkin(existing, skin) {
+						if(!skin || !skin.data) return existing;
+						var profile = {};
+						try { profile = existing ? JSON.parse(existing) : {}; } catch(e) { profile = {}; }
+						if(typeof profile !== "object" || profile === null) profile = {};
 						var model = (skin.model === "slim") ? "slim" : "default";
-						var skinData = skin.data || skin.raw;
-						function mergeProfile(existing) {
-							var profile = {};
-							try { profile = existing ? JSON.parse(existing) : {}; } catch(e) { profile = {}; }
-							if(typeof profile !== "object" || profile === null) profile = {};
-							if(typeof profile.customSkin === "object" && profile.customSkin !== null) {
-								profile.customSkin.data = skinData;
-								profile.customSkin.model = model;
-							} else {
-								profile.customSkin = { data: skinData, model: model };
-							}
-							profile.customSkinModel = model;
-							profile.presetSkin = "CUSTOM";
-							return JSON.stringify(profile);
+						if(typeof profile.customSkin === "object" && profile.customSkin !== null) {
+							profile.customSkin.data = skin.data;
+							profile.customSkin.model = model;
+						} else {
+							profile.customSkin = { data: skin.data, model: model };
 						}
-						function writeKey(key) {
-							try {
-								var existing = window.localStorage.getItem(key);
-								window.localStorage.setItem(key, mergeProfile(existing));
-							} catch(e) {}
-						}
+						profile.customSkinModel = model;
+						profile.presetSkin = "CUSTOM";
+						return JSON.stringify(profile);
+					}
+					function writeProfileKey(key, skin) {
+						try {
+							var existing = window.localStorage.getItem(key);
+							window.localStorage.setItem(key, mergeProfileWithSkin(existing, skin));
+						} catch(e) {}
+					}
+					function applyLauncherSkin() {
+						var skin = readLauncherSkin();
+						if(!skin || !skin.data) return;
 						var namespaces = ["_eaglercraft_1.12", "_eaglercraftX", "_eaglercraft_1.8"];
 						for(var i = 0; i < namespaces.length; i++) {
 							var ns = namespaces[i];
-							writeKey(ns + ".profile");
-							writeKey(ns + ":profile");
-							writeKey(ns + "/profile");
+							writeProfileKey(ns + ".profile", skin);
+							writeProfileKey(ns + ":profile", skin);
+							writeProfileKey(ns + "/profile", skin);
 						}
-						writeKey("profile");
+						writeProfileKey("profile", skin);
 					}
+					function installProfileHook() {
+						try {
+							var storageProto = window.Storage && window.Storage.prototype;
+							if(!storageProto) return;
+							var originalSetItem = storageProto.setItem;
+							if(typeof originalSetItem !== "function") return;
+							storageProto.setItem = function(key, value) {
+								try {
+									if(typeof key === "string" && /(^|[.:/])profile$/i.test(key)) {
+										var skin = readLauncherSkin();
+										if(skin && skin.data) {
+											value = mergeProfileWithSkin(value, skin);
+										}
+									}
+								} catch(e) {}
+								return originalSetItem.call(this, key, value);
+							};
+						} catch(e) {}
+					}
+					installProfileHook();
 					applyLauncherSkin();
+					setTimeout(applyLauncherSkin, 500);
+					setTimeout(applyLauncherSkin, 1500);
+					setTimeout(applyLauncherSkin, 3000);
 					
 					// %%%%%%%%% launch options %%%%%%%%%%%%
 					
