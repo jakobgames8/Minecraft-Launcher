@@ -60,6 +60,12 @@
 <script>
 (function(){
   var STARTUP_SCREEN_TIMEOUT_MS = 5000;
+  function removeOverlay(){
+    var screen = document.getElementById('startup-screen');
+    if(screen && screen.parentNode){
+      screen.parentNode.removeChild(screen);
+    }
+  }
   function removeStartupScreen(){
     var root = document.getElementById('game_frame') || document.body;
     var attempts = 0;
@@ -67,11 +73,12 @@
     function check(){
       var scope = root || document.body;
       var canvas = scope ? scope.querySelector('canvas') : document.querySelector('canvas');
+      if (canvas) {
+        removeOverlay();
+        return;
+      }
       if((Date.now() - start) > STARTUP_SCREEN_TIMEOUT_MS || attempts > 1800){
-        var screen = document.getElementById('startup-screen');
-        if(screen && screen.parentNode){
-          screen.parentNode.removeChild(screen);
-        }
+        removeOverlay();
         return;
       }
       attempts++;
@@ -87,6 +94,12 @@
   var start = Date.now();
   var timeoutMs = 5000;
   function ensure(){
+    var canvas = document.querySelector('canvas');
+    if (canvas) {
+      var existing = document.getElementById('startup-screen');
+      if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+      return;
+    }
     if (Date.now() - start > timeoutMs) {
       var existing = document.getElementById('startup-screen');
       if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
