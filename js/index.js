@@ -471,6 +471,10 @@ function getStoredSkin() {
     try { return JSON.parse(localStorage.getItem(SKIN_STORAGE_KEY)); } catch { return null; }
 }
 
+function isPngBase64(data) {
+    return typeof data === "string" && data.startsWith("iVBORw0KGgo");
+}
+
 function updateSkinPreview() {
     const preview = document.getElementById("skinPreview");
     const status = document.getElementById("skinStatus");
@@ -480,7 +484,12 @@ function updateSkinPreview() {
         status.textContent = "No skin uploaded yet.";
         return;
     }
-    preview.src = `data:image/png;base64,${skin.data}`;
+    const previewBase64 = skin.png || (isPngBase64(skin.data) ? skin.data : null);
+    if (previewBase64) {
+        preview.src = `data:image/png;base64,${previewBase64}`;
+    } else {
+        preview.removeAttribute("src");
+    }
     status.textContent = `Saved (${skin.width}x${skin.height})`;
 }
 
@@ -495,8 +504,15 @@ function saveSkin(dataUrl, width, height, model) {
         ctx.drawImage(img, 0, 0);
         const normalizedDataUrl = canvas.toDataURL("image/png");
         const normalizedBase64 = normalizedDataUrl.split(",")[1];
+        const imageData = ctx.getImageData(0, 0, 64, 64).data;
+        let binary = "";
+        for (let i = 0; i < imageData.length; i++) {
+            binary += String.fromCharCode(imageData[i]);
+        }
+        const rawBase64 = btoa(binary);
         const skin = {
-            data: normalizedBase64,
+            data: rawBase64,
+            png: normalizedBase64,
             width,
             height,
             model,
@@ -577,6 +593,30 @@ function initSkinsUI() {
         modelInputs.forEach((input) => {
             if (input.value === storedModel) input.checked = true;
         });
+    }
+
+    const storedSkin = getStoredSkin();
+    if (storedSkin && storedSkin.data && !storedSkin.png && isPngBase64(storedSkin.data)) {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = 64;
+            canvas.height = 64;
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, 64, 64);
+            ctx.drawImage(img, 0, 0);
+            const imageData = ctx.getImageData(0, 0, 64, 64).data;
+            let binary = "";
+            for (let i = 0; i < imageData.length; i++) {
+                binary += String.fromCharCode(imageData[i]);
+            }
+            storedSkin.png = storedSkin.data;
+            storedSkin.data = btoa(binary);
+            localStorage.setItem(SKIN_STORAGE_KEY, JSON.stringify(storedSkin));
+            applySkinToAllGames();
+            updateSkinPreview();
+        };
+        img.src = "data:image/png;base64," + storedSkin.data;
     }
 
     fileInput.addEventListener("change", () => {
