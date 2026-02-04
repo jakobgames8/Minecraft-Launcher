@@ -59,7 +59,7 @@
 </style>
 <script>
 (function(){
-  var STARTUP_SCREEN_TIMEOUT_MS = 5000;
+  var STARTUP_SCREEN_TIMEOUT_MS = 3000;
   function removeOverlay(){
     var screen = document.getElementById('startup-screen');
     if(screen && screen.parentNode){
@@ -92,7 +92,7 @@
 <script>
 (function(){
   var start = Date.now();
-  var timeoutMs = 5000;
+  var timeoutMs = 3000;
   function ensure(){
     var canvas = document.querySelector('canvas');
     if (canvas) {
