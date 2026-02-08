@@ -511,8 +511,9 @@ function saveSkin(dataUrl, width, height, model) {
         }
         const rawBase64 = btoa(binary);
         const skin = {
-            data: rawBase64,
+            data: normalizedBase64,
             png: normalizedBase64,
+            raw: rawBase64,
             width,
             height,
             model,
@@ -572,9 +573,12 @@ function applySkinToProfileKey(key, skin) {
         profile = {};
     }
     if (typeof profile !== "object" || profile === null) profile = {};
+    const skinData = isPngBase64(skin.data)
+        ? skin.data
+        : (isPngBase64(skin.png) ? skin.png : skin.data);
     profile.customSkin = {
         model: skin.model === "slim" ? "slim" : "default",
-        data: skin.data
+        data: skinData
     };
     profile.customSkinModel = skin.model === "slim" ? "slim" : "default";
     if (!profile.presetSkin) profile.presetSkin = "CUSTOM";
@@ -596,27 +600,37 @@ function initSkinsUI() {
     }
 
     const storedSkin = getStoredSkin();
-    if (storedSkin && storedSkin.data && !storedSkin.png && isPngBase64(storedSkin.data)) {
-        const img = new Image();
-        img.onload = () => {
-            const canvas = document.createElement("canvas");
-            canvas.width = 64;
-            canvas.height = 64;
-            const ctx = canvas.getContext("2d");
-            ctx.clearRect(0, 0, 64, 64);
-            ctx.drawImage(img, 0, 0);
-            const imageData = ctx.getImageData(0, 0, 64, 64).data;
-            let binary = "";
-            for (let i = 0; i < imageData.length; i++) {
-                binary += String.fromCharCode(imageData[i]);
-            }
+    if (storedSkin && storedSkin.data) {
+        const width = storedSkin.width || 64;
+        const height = storedSkin.height || 64;
+        if (isPngBase64(storedSkin.data)) {
             storedSkin.png = storedSkin.data;
-            storedSkin.data = btoa(binary);
             localStorage.setItem(SKIN_STORAGE_KEY, JSON.stringify(storedSkin));
-            applySkinToAllGames();
-            updateSkinPreview();
-        };
-        img.src = "data:image/png;base64," + storedSkin.data;
+        } else if (isPngBase64(storedSkin.png)) {
+            storedSkin.data = storedSkin.png;
+            localStorage.setItem(SKIN_STORAGE_KEY, JSON.stringify(storedSkin));
+        } else {
+            try {
+                const raw = atob(storedSkin.data);
+                if (raw.length === width * height * 4) {
+                    const bytes = new Uint8ClampedArray(raw.length);
+                    for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+                    const canvas = document.createElement("canvas");
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext("2d");
+                    const imgData = new ImageData(bytes, width, height);
+                    ctx.putImageData(imgData, 0, 0);
+                    const pngBase64 = canvas.toDataURL("image/png").split(",")[1];
+                    storedSkin.raw = storedSkin.data;
+                    storedSkin.data = pngBase64;
+                    storedSkin.png = pngBase64;
+                    localStorage.setItem(SKIN_STORAGE_KEY, JSON.stringify(storedSkin));
+                }
+            } catch {}
+        }
+        applySkinToAllGames();
+        updateSkinPreview();
     }
 
     fileInput.addEventListener("change", () => {
